@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "About Anime";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    This site is a simple catalog for tracking anime titles, genres, release years and user ratings.
+    Use the <a asp-controller="Anime" asp-action="Index">Anime</a> page to browse the collection,
+    add new entries, or see details and ratings for each title.
+</p>
+
+<section class="mt-4">
+    <h2>How rating works</h2>
+    <p>
+        Ratings are collected per-anime and the average rating is shown on list and details pages.
+        If an anime has no ratings yet, an average of 0.00 is displayed.
+    </p>
+</section>
