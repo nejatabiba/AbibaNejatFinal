@@ -137,4 +137,12 @@ namespace AbibaNejatFinal.Models
         public bool HasPreviousPage => CurrentPage > 1;
         public int TotalItems { get; set; }
     }
+
+    // ViewModel for MyList page - includes user's rating
+    public class UserAnimeViewModel
+    {
+        public Anime Anime { get; set; }
+        public int? UserRating { get; set; }
+        public DateTime AddedAt { get; set; }
+    }
 }
