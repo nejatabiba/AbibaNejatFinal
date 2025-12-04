@@ -88,4 +88,53 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("large_image_url")]
         public string LargeImageUrl { get; set; }
     }
+
+    // Pagination models for /anime endpoint
+    public class JikanAnimeListResponse
+    {
+        [JsonPropertyName("pagination")]
+        public JikanPagination Pagination { get; set; }
+
+        [JsonPropertyName("data")]
+        public List<AnimeData> Data { get; set; }
+    }
+
+    public class JikanPagination
+    {
+        [JsonPropertyName("last_visible_page")]
+        public int LastVisiblePage { get; set; }
+
+        [JsonPropertyName("has_next_page")]
+        public bool HasNextPage { get; set; }
+
+        [JsonPropertyName("current_page")]
+        public int CurrentPage { get; set; }
+
+        [JsonPropertyName("items")]
+        public JikanPaginationItems Items { get; set; }
+    }
+
+    public class JikanPaginationItems
+    {
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+
+        [JsonPropertyName("per_page")]
+        public int PerPage { get; set; }
+    }
+
+    // ViewModel for Browse page
+    public class AnimeBrowseViewModel
+    {
+        public List<Anime> Animes { get; set; } = new List<Anime>();
+        public string SearchQuery { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public bool HasNextPage { get; set; }
+        public bool HasPreviousPage => CurrentPage > 1;
+        public int TotalItems { get; set; }
+    }
 }

@@ -1,0 +1,427 @@
+@model AbibaNejatFinal.Models.AnimeBrowseViewModel
+@{
+    ViewData["Title"] = "Browse Anime";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1419;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 2rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #0f3460;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #16213e;
+            transform: translateY(-2px);
+        }
+
+        .results-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .anime-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .anime-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .anime-card-title {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .anime-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .anime-card:hover .anime-card-overlay {
+            opacity: 1;
+        }
+
+        .anime-card-overlay h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .anime-card-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .anime-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .anime-card-summary {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 8;
+            -webkit-box-orient: vertical;
+            flex: 1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pagination a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .pagination .current {
+            background: #0f3460;
+            color: #fff;
+        }
+
+        .pagination .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            opacity: 0.7;
+        }
+
+        @@media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .anime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Browse Anime</h1>
+        </div>
+
+        <form asp-controller="Anime" asp-action="Browse" method="get" class="search-form">
+            <input type="text"
+                   name="q"
+                   value="@Model.SearchQuery"
+                   placeholder="Search anime by name..."
+                   class="search-input" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        @if (Model.Animes.Any())
+        {
+            <p class="results-info">
+                Showing page @Model.CurrentPage of @Model.TotalPages
+                (@Model.TotalItems total results)
+                @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                {
+                    <span>for "@Model.SearchQuery"</span>
+                }
+            </p>
+
+            <div class="anime-grid">
+                @foreach (var anime in Model.Animes)
+                {
+                    <a asp-controller="Anime" asp-action="Details" asp-route-id="@anime.MalId" class="anime-card">
+                        <img src="@(anime.LargeImageUrl ?? anime.ImageUrl)" alt="@anime.Title" loading="lazy" />
+                        <div class="anime-card-title">@anime.Title</div>
+                        <div class="anime-card-overlay">
+                            <h3>@anime.Title</h3>
+                            <div class="anime-card-meta">
+                                @if (anime.Episodes.HasValue)
+                                {
+                                    <span>@anime.Episodes eps</span>
+                                }
+                                @if (anime.Score.HasValue)
+                                {
+                                    <span>@anime.Score.Value.ToString("0.00")</span>
+                                }
+                            </div>
+                            <p class="anime-card-summary">
+                                @(anime.Summary ?? "No summary available.")
+                            </p>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <div class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-controller="Anime"
+                       asp-action="Browse"
+                       asp-route-q="@Model.SearchQuery"
+                       asp-route-page="@(Model.CurrentPage - 1)">Previous</a>
+                }
+                else
+                {
+                    <span class="disabled">Previous</span>
+                }
+
+                @{
+                    int totalPages = Model.TotalPages;
+                    int current = Model.CurrentPage;
+                    int displayCount = 5;
+
+                    int start, end;
+
+                    if (totalPages <= displayCount)
+                    {
+                        start = 1;
+                        end = totalPages;
+                    }
+                    else if (current <= 2)
+                    {
+                        start = 1;
+                        end = displayCount;
+                    }
+                    else if (current >= totalPages - 1)
+                    {
+                        start = totalPages - displayCount + 1;
+                        end = totalPages;
+                    }
+                    else
+                    {
+                        start = current - 2;
+                        end = current + 2;
+                    }
+                }
+
+                @for (int i = start; i <= end; i++)
+                {
+                    if (i == current)
+                    {
+                        <span class="current">@i</span>
+                    }
+                    else
+                    {
+                        <a asp-controller="Anime"
+                           asp-action="Browse"
+                           asp-route-q="@Model.SearchQuery"
+                           asp-route-page="@i">@i</a>
+                    }
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-controller="Anime"
+                       asp-action="Browse"
+                       asp-route-q="@Model.SearchQuery"
+                       asp-route-page="@(Model.CurrentPage + 1)">Next</a>
+                }
+                else
+                {
+                    <span class="disabled">Next</span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-results">
+                <p>No anime found. Try a different search term.</p>
+            </div>
+        }
+    </div>
+</body>
+</html>
