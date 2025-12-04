@@ -1,7 +1,6 @@
 ﻿@model List<AbibaNejatFinal.Models.Anime>
 @{
     ViewData["Title"] = "Anime List - Your Ultimate Anime Tracker";
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -320,15 +319,6 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">AnimeList</div>
-        <ul class="nav-links">
-            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
-            <li><a href="@Url.Action("Browse", "Anime")">Browse</a></li>
-            <li><a href="@Url.Action("Login", "Account")">Login</a></li>
-        </ul>
-    </nav>
-
     <section class="hero">
         <div class="hero-background">
             <div class="bg-image loading active" id="bg1"></div>
@@ -339,8 +329,12 @@
             <h1>Track Your Anime Journey</h1>
             <p>Discover, organize, and share your favorite anime. Join thousands of fans creating their perfect watchlist.</p>
             <div class="cta-buttons">
-                <a href="@Url.Action("Register", "Account")" class="btn btn-primary">Get Started Free</a>
-                <a href="@Url.Action("Browse", "Anime")" class="btn btn-secondary">Explore Anime</a>
+                @if(User?.Identity?.IsAuthenticated == false)
+                    {
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Get Started Free</a>
+                    }
+                
+                <a asp-controller="Anime" asp-action="Browse" class="btn btn-secondary">Explore Anime</a>
             </div>
         </div>
     </section>
@@ -434,4 +428,4 @@
         </div>
     </section>
 </body>
-</html>
+</html></html>

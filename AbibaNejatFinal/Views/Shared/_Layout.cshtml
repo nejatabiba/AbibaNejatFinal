@@ -13,9 +13,25 @@
     <nav class="navbar">
         <div class="logo">AnimeList</div>
         <ul class="nav-links">
-            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
-            <li><a href="@Url.Action("Browse", "Anime")">Browse</a></li>
-            <li><a href="@Url.Action("Login", "Account")">Login</a></li>
+            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-area="" asp-controller="Anime" asp-action="Browse">Browse</a></li>
+
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <li>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link" style="color:#fff; text-decoration:none; background:none; border:none; padding:0; cursor:pointer; font-size: 16px; line-height: 21px;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+            }
         </ul>
     </nav>
 
@@ -24,7 +40,7 @@
     </div>
 
     <footer class="border-top footer text-muted mt-4">
-        <div class="container">© @DateTime.Now.Year - Your Name</div>
+        <div class="container">© @DateTime.Now.Year - Nejat Abiba</div>
     </footer>
 </body>
 </html>
