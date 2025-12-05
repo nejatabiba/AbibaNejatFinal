@@ -20,9 +20,6 @@ namespace AbibaNejatFinal.Models
         public string LargeImageUrl { get; set; } // Large/high-quality image
         public double? Score { get; set; } // Nullable in case no score
 
-        // Optional: link to MyAnimeList page
-        public string MalUrl { get; set; }
-
         // Optional: user-specific data (not stored here, but in a join table)
     }
 
@@ -61,8 +58,6 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("jpg")]
         public AnimeJpg Jpg { get; set; }
 
-        [JsonPropertyName("webp")]
-        public AnimeWebp Webp { get; set; }
     }
 
     public class AnimeJpg
@@ -70,22 +65,63 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("image_url")]
         public string ImageUrl { get; set; }
 
-        [JsonPropertyName("small_image_url")]
-        public string SmallImageUrl { get; set; }
 
         [JsonPropertyName("large_image_url")]
         public string LargeImageUrl { get; set; }
     }
 
-    public class AnimeWebp
+    // Pagination models for /anime endpoint
+    public class JikanAnimeListResponse
     {
-        [JsonPropertyName("image_url")]
-        public string ImageUrl { get; set; }
+        [JsonPropertyName("pagination")]
+        public JikanPagination Pagination { get; set; }
 
-        [JsonPropertyName("small_image_url")]
-        public string SmallImageUrl { get; set; }
+        [JsonPropertyName("data")]
+        public List<AnimeData> Data { get; set; }
+    }
 
-        [JsonPropertyName("large_image_url")]
-        public string LargeImageUrl { get; set; }
+    public class JikanPagination
+    {
+        [JsonPropertyName("last_visible_page")]
+        public int LastVisiblePage { get; set; }
+
+        [JsonPropertyName("has_next_page")]
+        public bool HasNextPage { get; set; }
+
+        [JsonPropertyName("current_page")]
+        public int CurrentPage { get; set; }
+
+        [JsonPropertyName("items")]
+        public JikanPaginationItems Items { get; set; }
+    }
+
+    public class JikanPaginationItems
+    {
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+
+        [JsonPropertyName("per_page")]
+        public int PerPage { get; set; }
+    }
+
+    // ViewModel for Browse page
+    public class AnimeBrowseViewModel
+    {
+        public List<Anime> Animes { get; set; } = new List<Anime>();
+        public string SearchQuery { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public bool HasNextPage { get; set; }
+        public bool HasPreviousPage => CurrentPage > 1;
+        public int TotalItems { get; set; }
+    }
+
+    // ViewModel for MyList page - includes user's rating
+    public class UserAnimeViewModel
+    {
+        public Anime Anime { get; set; }
+        public int? UserRating { get; set; }
+        public DateTime AddedAt { get; set; }
     }
 }
