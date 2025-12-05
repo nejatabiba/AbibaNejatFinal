@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AbibaNejatFinal.Controllers
 {
+    /// <summary>
+    /// Controller for home and general pages.
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly AnimeService _animeService;
@@ -13,14 +16,15 @@ namespace AbibaNejatFinal.Controllers
             _animeService = animeService;
         }
 
+        // GET: /Home/Index
         public async Task<IActionResult> Index()
         {
-            // List of popular anime MAL IDs to display in background
+            // Popular anime MAL IDs for the background slideshow
             var popularAnimeMalIds = new List<int>
             {
                 38000,  // Demon Slayer
                 1,      // Cowboy Bebop
-                2001,   // Gurran Laggan
+                2001,   // Gurren Lagann
                 11757,  // Sword Art Online
                 31964,  // My Hero Academia
                 38524,  // Attack on Titan Season 3 Part 2
@@ -35,10 +39,10 @@ namespace AbibaNejatFinal.Controllers
                 14719   // JoJo's Bizarre Adventure
             };
 
-            // Randomly select 10 anime IDs
+            // Randomly select 10 anime for variety
             var random = new Random();
             var selectedIds = popularAnimeMalIds
-                .OrderBy(x => random.Next())
+                .OrderBy(_ => random.Next())
                 .Take(10)
                 .ToList();
 
@@ -49,12 +53,12 @@ namespace AbibaNejatFinal.Controllers
                 {
                     var anime = await _animeService.GetAnimeAsync(malId);
                     animeList.Add(anime);
-                    // Add delay to respect Jikan API rate limits (3 requests/second)
+
+                    // Respect Jikan API rate limits (3 requests/second)
                     await Task.Delay(400);
                 }
                 catch (Exception ex)
                 {
-                    // Log error but continue with other anime
                     Console.WriteLine($"Error fetching anime {malId}: {ex.Message}");
                 }
             }
@@ -62,6 +66,7 @@ namespace AbibaNejatFinal.Controllers
             return View(animeList);
         }
 
+        // GET: /Home/About
         public IActionResult About()
         {
             return View();

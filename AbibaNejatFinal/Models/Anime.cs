@@ -1,34 +1,38 @@
-﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace AbibaNejatFinal.Models
 {
+    /// <summary>
+    /// Represents an anime entry (mapped from Jikan API data).
+    /// </summary>
     public class Anime
     {
-        [Key]
-        public int Id { get; set; } // Primary key for your database
-        public int MalId { get; set; } // MyAnimeList ID, useful for API updates
 
-        [Required]
-        [MaxLength(200)]
+        public int MalId { get; set; }
         public string Title { get; set; }
 
         public string Summary { get; set; }
-        public int? Episodes { get; set; } // Nullable for unknown episodes
-        public string ImageUrl { get; set; } // Main image
-        public string LargeImageUrl { get; set; } // Large/high-quality image
-        public double? Score { get; set; } // Nullable in case no score
-
-        // Optional: user-specific data (not stored here, but in a join table)
+        public int? Episodes { get; set; }
+        public string ImageUrl { get; set; }
+        public string LargeImageUrl { get; set; }
+        public double? Score { get; set; }
     }
 
+    #region Jikan API Response DTOs
+
+    /// <summary>
+    /// Response wrapper for single anime from Jikan API.
+    /// </summary>
     public class JikanAnimeResponse
     {
         [JsonPropertyName("data")]
         public AnimeData Data { get; set; }
     }
 
+    /// <summary>
+    /// Anime data from Jikan API.
+    /// </summary>
     public class AnimeData
     {
         [JsonPropertyName("mal_id")]
@@ -44,7 +48,7 @@ namespace AbibaNejatFinal.Models
         public string Synopsis { get; set; }
 
         [JsonPropertyName("episodes")]
-        public int? Episodes { get; set; }   // nullable because some anime have unknown episodes
+        public int? Episodes { get; set; }
 
         [JsonPropertyName("images")]
         public AnimeImages Images { get; set; }
@@ -57,7 +61,6 @@ namespace AbibaNejatFinal.Models
     {
         [JsonPropertyName("jpg")]
         public AnimeJpg Jpg { get; set; }
-
     }
 
     public class AnimeJpg
@@ -65,12 +68,13 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("image_url")]
         public string ImageUrl { get; set; }
 
-
         [JsonPropertyName("large_image_url")]
         public string LargeImageUrl { get; set; }
     }
 
-    // Pagination models for /anime endpoint
+    /// <summary>
+    /// Response wrapper for anime list from Jikan API.
+    /// </summary>
     public class JikanAnimeListResponse
     {
         [JsonPropertyName("pagination")]
@@ -97,7 +101,6 @@ namespace AbibaNejatFinal.Models
 
     public class JikanPaginationItems
     {
-
         [JsonPropertyName("total")]
         public int Total { get; set; }
 
@@ -105,7 +108,13 @@ namespace AbibaNejatFinal.Models
         public int PerPage { get; set; }
     }
 
-    // ViewModel for Browse page
+    #endregion
+
+    #region ViewModels
+
+    /// <summary>
+    /// ViewModel for the Browse page with pagination.
+    /// </summary>
     public class AnimeBrowseViewModel
     {
         public List<Anime> Animes { get; set; } = new List<Anime>();
@@ -117,11 +126,15 @@ namespace AbibaNejatFinal.Models
         public int TotalItems { get; set; }
     }
 
-    // ViewModel for MyList page - includes user's rating
+    /// <summary>
+    /// ViewModel for MyList page - includes user's rating.
+    /// </summary>
     public class UserAnimeViewModel
     {
         public Anime Anime { get; set; }
         public int? UserRating { get; set; }
         public DateTime AddedAt { get; set; }
     }
+
+    #endregion
 }

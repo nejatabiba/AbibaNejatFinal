@@ -1,339 +1,77 @@
-﻿@{
-    ViewData["Title"] = "About Me - Nejat Abiba";
+@{
+    ViewData["Title"] = "About";
+    ViewData["BodyClass"] = "about-page";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@section Styles {
+    <link rel="stylesheet" href="~/css/about.css" />
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f1419;
-            color: #fff;
-            min-height: 100vh;
-        }
+<div class="hero-banner"></div>
 
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, rgba(15, 20, 25, 0.3), rgba(15, 20, 25, 1));
-            z-index: 1;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 2;
-            margin-top: -200px;
-            padding-bottom: 4rem;
-        }
-
-        .about-details {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .profile-photo {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            aspect-ratio: 3/4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .profile-photo img {
-            position: relative;
-            top: 125px;
-            left: 30px;
-        }
-
-        .profile-info {
-            padding-top: 100px;
-        }
-
-        .profile-title {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            line-height: 1.2;
-        }
-
-        .profile-subtitle {
-            font-size: 1.3rem;
-            opacity: 0.8;
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            margin-top: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .profile-content {
-            line-height: 1.8;
-            font-size: 1.05rem;
-            opacity: 0.9;
-        }
-
-        .profile-content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .experience-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            border-left: 3px solid #0f3460;
-        }
-
-        .experience-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 0.75rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .experience-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .experience-date {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        .experience-company {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 0.5rem;
-        }
-
-        .tech-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.75rem;
-        }
-
-        .tech-tag {
-            background: rgba(15, 52, 96, 0.5);
-            padding: 0.3rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .skill-category {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-        }
-
-        .skill-category h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            color: #fff;
-        }
-
-        .skill-list {
-            list-style: none;
-            font-size: 0.95rem;
-        }
-
-        .skill-list li {
-            padding: 0.25rem 0;
-            opacity: 0.9;
-        }
-
-        .skill-list li::before {
-            content: '▹ ';
-            color: #0f3460;
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin-top: 1.5rem;
-        }
-
-        .btn-primary {
-            background: #0f3460;
-            color: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: #16213e;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            margin-left: 1rem;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        @@media (max-width: 900px) {
-            .about-details {
-                grid-template-columns: 1fr;
-            }
-
-            .profile-photo {
-                max-width: 300px;
-                margin: 0 auto;
-            }
-
-            .profile-info {
-                padding-top: 1rem;
-            }
-
-            .profile-title {
-                font-size: 1.8rem;
-            }
-
-
-            .hero-banner {
-                height: 300px;
-            }
-
-            .container {
-                margin-top: -100px;
-            }
-
-            .btn-secondary {
-                margin-left: 0;
-                margin-top: 0.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="hero-banner"></div>
-
-    <div class="container">
-        <div class="about-details">
-            <div class="profile-photo">
-                <img src="~/images/Nejat.jpg" alt="Nejat Abiba" />
-            </div>
-            <div class="profile-info">
-                <h1 class="profile-title">Nejat Abiba</h1>
-                <p class="profile-subtitle">Full-Stack Developer | Anime Enthusiast</p>
-
-                <h2 class="section-title">About Me</h2>
-                <div class="profile-content">
-                    <p>
-                        Hello! I'm Nejat Abiba, a part-time student at the University of Cincinnati, and currently working as a full-stack developer.
-                        I enjoy building practical applications at home that I will use myself, as well as playing video games, and hitting the gym.
-                        I also love to travel. My favorite destination is Norway for its nature, and especially its people.
-                    </p>
-                    <p>
-                        I created this website, not only as the final project for my Web Server Application Development Class, but as an homage to one
-                        of my favorite types of media. Anime. From as far back as I can remeber, I was watching anime; my youth being filled with various 
-                        Hayao Miyazaki films. To this day, one of my favorite movies of all time is Nausicaä of the Valley of the Wind, which I annoyed my siblings
-                        with by watching it over and over again. 
-                    <p>
-                        Growing older and watching more anime has shown me the various genres and deep stories that exist within the world of japanese animation.
-                        I hope you can enjoy this platform and find a story that you can connect with like I have.
-                    </p>
-                        
-                    <p>
-                        Thank you!
-                    </p>
-                </div>
-
-                <h2 class="section-title">Professional Experience</h2>
-                <div class="experience-timeline">
-                    <div class="experience-item">
-                        <div class="experience-header">
-                            <div>
-                                <div class="experience-title">Associate Developer</div>
-                                <div class="experience-company">Preferred Risk Insurance Services</div>
-                            </div>
-                            <div class="experience-date">Aug 2024 - Present</div>
-                        </div>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Next.js</span>
-                            <span class="tech-tag">.NET</span>
-                            <span class="tech-tag">Azure DevOps</span>
-                        </div>
-                    </div>
-
-                    <div class="experience-item">
-                        <div class="experience-header">
-                            <div>
-                                <div class="experience-title">Full-Stack Developer Intern</div>
-                                <div class="experience-company">Preferred Risk Insurance Services</div>
-                            </div>
-                            <div class="experience-date">May 2024 - Aug 2024</div>
-                        </div>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Next.js</span>
-                            <span class="tech-tag">.NET</span>
-                            <span class="tech-tag">Azure DevOps</span>
-                        </div>
-                    </div>
-                </div>
-
-                    <a asp-controller="Anime" asp-action="Browse" class="btn btn-secondary"> Get to Finding Anime!</a>
-                </div>
-            </div>
+<div class="container">
+    <div class="about-details">
+        <div class="profile-photo">
+            <img src="~/images/Nejat.jpg" alt="Nejat Abiba" />
         </div>
-</body>
-</html>
+        <div class="profile-info">
+            <h1 class="profile-title">Nejat Abiba</h1>
+            <p class="profile-subtitle">Full-Stack Developer | Anime Enthusiast</p>
+
+            <h2 class="section-title">About Me</h2>
+            <div class="profile-content">
+                <p>
+                    Hello! I'm Nejat Abiba, a part-time student at the University of Cincinnati, and currently working as a full-stack developer.
+                    I enjoy building practical applications at home that I will use myself, as well as playing video games, and hitting the gym.
+                    I also love to travel. My favorite destination is Norway for its nature, and especially its people.
+                </p>
+                <p>
+                    I created this website, not only as the final project for my Web Server Application Development Class, but as an homage to one
+                    of my favorite types of media. Anime. From as far back as I can remember, I was watching anime; my youth being filled with various
+                    Hayao Miyazaki films. To this day, one of my favorite movies of all time is Nausicaä of the Valley of the Wind, which I annoyed my siblings
+                    with by watching it over and over again.
+                </p>
+                <p>
+                    Growing older and watching more anime has shown me the various genres and deep stories that exist within the world of Japanese animation.
+                    I hope you can enjoy this platform and find a story that you can connect with like I have.
+                </p>
+                <p>Thank you!</p>
+            </div>
+
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-timeline">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">Associate Developer</div>
+                            <div class="experience-company">Preferred Risk Insurance Services</div>
+                        </div>
+                        <div class="experience-date">Aug 2024 - Present</div>
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">Azure DevOps</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <div class="experience-title">Full-Stack Developer Intern</div>
+                            <div class="experience-company">Preferred Risk Insurance Services</div>
+                        </div>
+                        <div class="experience-date">May 2024 - Aug 2024</div>
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">Azure DevOps</span>
+                    </div>
+                </div>
+            </div>
+
+            <a asp-controller="Anime" asp-action="Browse" class="btn btn-secondary">Get to Finding Anime!</a>
+        </div>
+    </div>
+</div>

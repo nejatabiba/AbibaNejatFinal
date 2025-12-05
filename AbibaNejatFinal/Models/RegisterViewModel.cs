@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AbibaNejatFinal.Models
 {
+    /// <summary>
+    /// ViewModel for the registration form.
+    /// </summary>
     public class RegisterViewModel
     {
         [Required]
