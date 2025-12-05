@@ -38,15 +38,8 @@ namespace AbibaNejatFinal.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("PasswordSalt")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -81,9 +74,6 @@ namespace AbibaNejatFinal.Migrations
 
                     b.Property<int?>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<bool>("WantToWatch")
-                        .HasColumnType("bit");
 
                     b.HasKey("AccountId", "MalId");
 

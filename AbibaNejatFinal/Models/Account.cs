@@ -23,7 +23,6 @@ namespace AbibaNejatFinal.Models
         [MaxLength(200)]
         public string? PasswordHash { get; set; }
 
-        // Optional salt (not used with ASP.NET Identity PasswordHasher)
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [MaxLength(50)]
