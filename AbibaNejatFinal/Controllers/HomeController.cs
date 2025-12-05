@@ -18,27 +18,37 @@ namespace AbibaNejatFinal.Controllers
             // List of popular anime MAL IDs to display in background
             var popularAnimeMalIds = new List<int>
             {
-                5114,  // Fullmetal Alchemist: Brotherhood
-                16498, // Attack on Titan
-                11061, // Hunter x Hunter
-                9253,  // Steins;Gate
-                28977, // Gintama
-                38524, // Attack on Titan Season 3 Part 2
-                9969,  // Gintama'
-                820,   // Ginga Eiyuu Densetsu
-                15417, // Gintama': Enchousen
-                918    // Gintama
+                38000,  // Demon Slayer
+                1,      // Cowboy Bebop
+                2001,   // Gurran Laggan
+                11757,  // Sword Art Online
+                31964,  // My Hero Academia
+                38524,  // Attack on Titan Season 3 Part 2
+                205,    // Samurai Champloo
+                38680,  // Fruits Basket
+                23755,  // The Seven Deadly Sins
+                28249,  // The Heroic Legend of Arslan
+                33,     // Berserk
+                32281,  // Your Name.
+                28851,  // A Silent Voice
+                30,     // Neon Genesis Evangelion
+                14719   // JoJo's Bizarre Adventure
             };
 
-            var animeList = new List<Anime>();
+            // Randomly select 10 anime IDs
+            var random = new Random();
+            var selectedIds = popularAnimeMalIds
+                .OrderBy(x => random.Next())
+                .Take(10)
+                .ToList();
 
-            foreach (var malId in popularAnimeMalIds.Take(6)) // Take 6 for rotation
+            var animeList = new List<Anime>();
+            foreach (var malId in selectedIds)
             {
                 try
                 {
                     var anime = await _animeService.GetAnimeAsync(malId);
                     animeList.Add(anime);
-
                     // Add delay to respect Jikan API rate limits (3 requests/second)
                     await Task.Delay(400);
                 }
@@ -50,6 +60,11 @@ namespace AbibaNejatFinal.Controllers
             }
 
             return View(animeList);
+        }
+
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }

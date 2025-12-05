@@ -20,9 +20,6 @@ namespace AbibaNejatFinal.Models
         public string LargeImageUrl { get; set; } // Large/high-quality image
         public double? Score { get; set; } // Nullable in case no score
 
-        // Optional: link to MyAnimeList page
-        public string MalUrl { get; set; }
-
         // Optional: user-specific data (not stored here, but in a join table)
     }
 
@@ -61,8 +58,6 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("jpg")]
         public AnimeJpg Jpg { get; set; }
 
-        [JsonPropertyName("webp")]
-        public AnimeWebp Webp { get; set; }
     }
 
     public class AnimeJpg
@@ -70,20 +65,6 @@ namespace AbibaNejatFinal.Models
         [JsonPropertyName("image_url")]
         public string ImageUrl { get; set; }
 
-        [JsonPropertyName("small_image_url")]
-        public string SmallImageUrl { get; set; }
-
-        [JsonPropertyName("large_image_url")]
-        public string LargeImageUrl { get; set; }
-    }
-
-    public class AnimeWebp
-    {
-        [JsonPropertyName("image_url")]
-        public string ImageUrl { get; set; }
-
-        [JsonPropertyName("small_image_url")]
-        public string SmallImageUrl { get; set; }
 
         [JsonPropertyName("large_image_url")]
         public string LargeImageUrl { get; set; }
@@ -116,8 +97,6 @@ namespace AbibaNejatFinal.Models
 
     public class JikanPaginationItems
     {
-        [JsonPropertyName("count")]
-        public int Count { get; set; }
 
         [JsonPropertyName("total")]
         public int Total { get; set; }

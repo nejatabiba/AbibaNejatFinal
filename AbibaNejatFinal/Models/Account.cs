@@ -36,10 +36,6 @@ namespace AbibaNejatFinal.Models
         [MaxLength(50)]
         public string Role { get; set; } = "User";
 
-        // Concurrency token
-        [Timestamp]
-        public byte[]? RowVersion { get; set; }
-
         // Navigation: join entities linking this account to Anime with extra data
         public ICollection<AccountAnime> AccountAnimes { get; set; } = new List<AccountAnime>();
     }
