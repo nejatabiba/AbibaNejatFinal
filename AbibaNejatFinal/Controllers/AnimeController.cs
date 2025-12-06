@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AbibaNejatFinal.Controllers
 {
+    /// <summary>
+    /// Controller for browsing anime, viewing details, and managing user's anime list.
+    /// </summary>
     public class AnimeController : Controller
     {
         private readonly AnimeService _animeService;
@@ -19,6 +22,7 @@ namespace AbibaNejatFinal.Controllers
             _db = db;
         }
 
+        // GET: /Anime/Browse
         public async Task<IActionResult> Browse(string q, int page = 1)
         {
             try
@@ -33,6 +37,7 @@ namespace AbibaNejatFinal.Controllers
             }
         }
 
+        // GET: /Anime/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -58,6 +63,7 @@ namespace AbibaNejatFinal.Controllers
             }
         }
 
+        // POST: /Anime/AddToList
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -82,6 +88,7 @@ namespace AbibaNejatFinal.Controllers
             return RedirectToAction("Details", new { id = malId });
         }
 
+        // POST: /Anime/RemoveFromList
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -102,6 +109,7 @@ namespace AbibaNejatFinal.Controllers
             return RedirectToAction("Details", new { id = malId });
         }
 
+        // POST: /Anime/RateAnime
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -123,6 +131,7 @@ namespace AbibaNejatFinal.Controllers
             return RedirectToAction("Details", new { id = malId });
         }
 
+        // GET: /Anime/MyList
         [Authorize]
         public async Task<IActionResult> MyList()
         {
@@ -145,7 +154,8 @@ namespace AbibaNejatFinal.Controllers
                         UserRating = aa.Rating,
                         AddedAt = aa.AddedAt
                     });
-                    // Respect API rate limits
+
+                    // Respect Jikan API rate limits
                     await Task.Delay(350);
                 }
                 catch (Exception ex)

@@ -1,267 +1,63 @@
-﻿@model List<AbibaNejatFinal.Models.Anime>
+@model List<AbibaNejatFinal.Models.Anime>
 @{
-    ViewData["Title"] = "Anime List - Your Ultimate Anime Tracker";
+    ViewData["Title"] = "Home";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <style>
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            margin: 0;
-            width: 100%;
-        }
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}
 
-        .hero-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            margin: 0;
-            padding: 0;
-        }
-
-        .hero-background::before {
-             content: '';
-             position: absolute;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
-             background: linear-gradient(135deg, rgba(26, 26, 46, 0.75) 0%, rgba(22, 33, 62, 0.75) 100%);
-             z-index: 2;
-         }
-
-        .bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            z-index: 1;
-        }
-
-        @@media (min-width: 1400px) {
-            .bg-image {
-                background-size: 100% auto;
+<section class="hero">
+    <div class="hero-background">
+        <div class="bg-image loading active" id="bg1"></div>
+        <div class="bg-image" id="bg2"></div>
+        <div class="bg-image" id="bg3"></div>
+    </div>
+    <div class="hero-content">
+        <h1>Track Your Anime Journey</h1>
+        <p>Discover, organize, and share your favorite anime. Join thousands of fans creating their perfect watchlist.</p>
+        <div class="cta-buttons">
+            @if (User?.Identity?.IsAuthenticated == false)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Get Started Free</a>
             }
-        }
-
-        .bg-image.active {
-            opacity: 1;
-        }
-
-        .bg-image.loading {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-
-        @@keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-30px);
-            }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            z-index: 1;
-            animation: fadeInUp 1s ease;
-        }
-
-        @@keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: #0f3460;
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: #16213e;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #fff;
-            border: 2px solid #fff;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
-        }
-
-        .features {
-            padding: 5rem 5%;
-            background: #0f1419;
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2.5rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        @@media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .features h2 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <section class="hero">
-        <div class="hero-background">
-            <div class="bg-image loading active" id="bg1"></div>
-            <div class="bg-image" id="bg2"></div>
-            <div class="bg-image" id="bg3"></div>
+            <a asp-controller="Anime" asp-action="Browse" class="btn btn-secondary">Explore Anime</a>
         </div>
-        <div class="hero-content">
-            <h1>Track Your Anime Journey</h1>
-            <p>Discover, organize, and share your favorite anime. Join thousands of fans creating their perfect watchlist.</p>
-            <div class="cta-buttons">
-                @if(User?.Identity?.IsAuthenticated == false)
-                    {
-                    <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Get Started Free</a>
-                    }
-                
-                <a asp-controller="Anime" asp-action="Browse" class="btn btn-secondary">Explore Anime</a>
-            </div>
-        </div>
-    </section>
+    </div>
+</section>
 
+<section class="features">
+    <h2>Features of AnimeList</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📺</div>
+            <h3>Track Your Anime</h3>
+            <p>Keep track of every anime you watch and never lose your favorite series again.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⭐</div>
+            <h3>Rate & Review</h3>
+            <p>Share your thoughts about your favorite (and not so favorite) shows.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Discover New Anime</h3>
+            <p>Sort through a large list of anime, and find what series to watch next.</p>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
     <script>
         // Get anime images from the server-side model
         const animeImages = [
             @if (Model != null && Model.Any())
             {
-                    @Html.Raw(string.Join(",\n            ", Model.Select(a => $"'{a.LargeImageUrl ?? a.ImageUrl}'")))
+                @Html.Raw(string.Join(",\n            ", Model.Select(a => $"'{a.LargeImageUrl ?? a.ImageUrl}'")))
             }
             else
             {
-                    @Html.Raw("'https://cdn.myanimelist.net/images/anime/1208/94745l.jpg',\n            'https://cdn.myanimelist.net/images/anime/1337/99013l.jpg',\n            'https://cdn.myanimelist.net/images/anime/5/87048l.jpg'")
+                @Html.Raw("'https://cdn.myanimelist.net/images/anime/1208/94745l.jpg',\n            'https://cdn.myanimelist.net/images/anime/1337/99013l.jpg',\n            'https://cdn.myanimelist.net/images/anime/5/87048l.jpg'")
             }
         ];
 
@@ -274,16 +70,14 @@
         ];
 
         function initBackgroundRotation() {
-            // Set initial image
             if (animeImages.length > 0) {
                 bgElements[0].style.backgroundImage = `url(${animeImages[0]})`;
                 bgElements[0].classList.remove('loading');
             }
 
-            // Start rotation after initial load
             setTimeout(() => {
                 rotateBackground();
-                setInterval(rotateBackground, 5000); // Change every 5 seconds
+                setInterval(rotateBackground, 5000);
             }, 3000);
         }
 
@@ -292,20 +86,14 @@
 
             currentImageIndex = (currentImageIndex + 1) % animeImages.length;
             const nextBgIndex = (currentImageIndex + 1) % bgElements.length;
-            const currentBgIndex = currentImageIndex % bgElements.length;
 
-            // Preload next image
             const nextImage = new Image();
             nextImage.src = animeImages[currentImageIndex];
 
             nextImage.onload = () => {
-                // Set the background image for the next element
                 bgElements[nextBgIndex].style.backgroundImage = `url(${animeImages[currentImageIndex]})`;
-
-                // Fade in the new image
                 bgElements[nextBgIndex].classList.add('active');
 
-                // Fade out the old image after a brief overlap
                 setTimeout(() => {
                     bgElements.forEach((el, idx) => {
                         if (idx !== nextBgIndex) {
@@ -316,29 +104,6 @@
             };
         }
 
-        // Start the background rotation when page loads
         initBackgroundRotation();
     </script>
-
-    <section class="features">
-        <h2>Features of AnimeList</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📺</div>
-                <h3>Track Your Anime</h3>
-                <p>Keep track of every anime you watch and never lose your favorite series again.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⭐</div>
-                <h3>Rate & Review</h3>
-                <p>Share your thoughts about your favorite (and not so favorite) shows.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <h3>Discover New Anime</h3>
-                <p>Sort through a large list of anime, and find what series to watch next.</p>
-            </div>
-        </div>
-    </section>
-</body>
-</html></html>
+}

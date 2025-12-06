@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace AbibaNejatFinal.Models
 {
+    /// <summary>
+    /// ViewModel for the login form.
+    /// </summary>
     public class LoginViewModel
     {
         [Required]

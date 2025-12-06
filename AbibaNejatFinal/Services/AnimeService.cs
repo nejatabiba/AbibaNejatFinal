@@ -1,9 +1,12 @@
-﻿using AbibaNejatFinal.Models;
+using AbibaNejatFinal.Models;
 using System.Text.Json;
 using System.Web;
 
 namespace AbibaNejatFinal.Services
 {
+    /// <summary>
+    /// Service for fetching anime data from the Jikan API (MyAnimeList).
+    /// </summary>
     public class AnimeService
     {
         private readonly HttpClient _client;
@@ -14,6 +17,9 @@ namespace AbibaNejatFinal.Services
             _client = client;
         }
 
+        /// <summary>
+        /// Fetches a single anime by its MAL ID.
+        /// </summary>
         public async Task<Anime> GetAnimeAsync(int malId)
         {
             var response = await _client.GetStringAsync($"{BaseUrl}/anime/{malId}");
@@ -22,6 +28,9 @@ namespace AbibaNejatFinal.Services
             return MapToAnime(animeData.Data);
         }
 
+        /// <summary>
+        /// Searches anime with optional query and pagination.
+        /// </summary>
         public async Task<AnimeBrowseViewModel> SearchAnimeAsync(string query = null, int page = 1)
         {
             var url = $"{BaseUrl}/anime?page={page}&order_by=score&sort=desc";
@@ -34,7 +43,7 @@ namespace AbibaNejatFinal.Services
             var response = await _client.GetStringAsync(url);
             var result = JsonSerializer.Deserialize<JikanAnimeListResponse>(response);
 
-            var viewModel = new AnimeBrowseViewModel
+            return new AnimeBrowseViewModel
             {
                 SearchQuery = query,
                 CurrentPage = result.Pagination.CurrentPage,
@@ -43,10 +52,11 @@ namespace AbibaNejatFinal.Services
                 TotalItems = result.Pagination.Items.Total,
                 Animes = result.Data?.Select(MapToAnime).ToList() ?? new List<Anime>()
             };
-
-            return viewModel;
         }
 
+        /// <summary>
+        /// Maps Jikan API data to our Anime model.
+        /// </summary>
         private Anime MapToAnime(AnimeData data)
         {
             return new Anime

@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Security.Claims;
 using AbibaNejatFinal.Data;
 using AbibaNejatFinal.Models;
@@ -11,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AbibaNejatFinal.Controllers
 {
+    /// <summary>
+    /// Controller for user authentication (register, login, logout).
+    /// </summary>
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -37,9 +38,10 @@ namespace AbibaNejatFinal.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Check uniqueness
+            // Check for existing email/username
             var emailExists = await _db.Accounts.AnyAsync(a => a.Email == model.Email);
             var usernameExists = await _db.Accounts.AnyAsync(a => a.Username == model.Username);
+
             if (emailExists)
                 ModelState.AddModelError(nameof(model.Email), "Email is already in use.");
             if (usernameExists)
@@ -50,10 +52,8 @@ namespace AbibaNejatFinal.Controllers
             var account = new Account
             {
                 Username = model.Username,
-                Email = model.Email,
-                // other fields defaulted in Account (CreatedAt, IsActive, Role)
+                Email = model.Email
             };
-
             account.PasswordHash = _passwordHasher.HashPassword(account, model.Password);
 
             _db.Accounts.Add(account);
@@ -84,7 +84,7 @@ namespace AbibaNejatFinal.Controllers
             var account = await _db.Accounts
                 .FirstOrDefaultAsync(a => a.Email == model.UsernameOrEmail || a.Username == model.UsernameOrEmail);
 
-            if (account == null || !account.IsActive)
+            if (account == null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid credentials.");
                 return View(model);
@@ -97,6 +97,7 @@ namespace AbibaNejatFinal.Controllers
                 return View(model);
             }
 
+            // Build claims for the authenticated user
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
@@ -115,7 +116,6 @@ namespace AbibaNejatFinal.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
 
-            // indicate success so view/layout can show a message after redirect
             TempData["SuccessMessage"] = "Signed in successfully.";
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
